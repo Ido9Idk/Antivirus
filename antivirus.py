@@ -34,20 +34,21 @@ def get_res(id, headers):
     else:
         print("Error getting file information:", getfile.status_code)
 
-def allfiles(path, filelist):
+def allfiles(path, filelist, apikey):
     for itempath in path.iterdir():
         if itempath.is_dir():
-            allfiles(itempath, filelist)
+            allfiles(itempath, filelist, apikey)
         else:
             filelist.append(itempath)
             print(f"Scanning {itempath.name}...")
-            post_file(itempath, "91ad757684956a07f1d08f6962fb84698cc6146314b353f5a6ac485ca0c4fe62")
+            post_file(itempath, apikey)
 
-def scan(path):
+def scan(path, apikey):
     contents = []
-    allfiles(path, contents)
-    return contents
+    allfiles(path, contents, apikey)
+    print(f"scanned: {contents}")
 
 
 path = Path(input("Enter folder path: "))
-print(scan(path))
+apikey = input("Enter api key: ")
+scan(path, apikey)
